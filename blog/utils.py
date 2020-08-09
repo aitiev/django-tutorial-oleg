@@ -1,6 +1,7 @@
 from time import time
 
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -62,3 +63,16 @@ class ObjectUpdateMixin:
             return redirect(updated_obj)
         return render(request, self.template, context)
 
+class ObjectDeleteMixin:
+    model = None
+    template = None
+    success_url = None
+
+    def get(self, request, slug):
+        obj = get_object_or_404(self.model, slug__iexact=slug)
+        return render(request, self.template, {self.model.__name__.lower(): obj})
+
+    def post(self, request, slug):
+        obj = get_object_or_404(self.model, slug__iexact=slug)
+        obj.delete()
+        return redirect(reverse(self.success_url))

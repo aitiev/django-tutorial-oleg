@@ -19,6 +19,11 @@ class PostCreate(ObjectCreateMixin, View):
     form_model = PostForm
     template = 'blog/post_create.html'
 
+class PostUpdate(ObjectUpdateMixin, View):
+    model = Post
+    form_model = PostForm
+    template = 'blog/post_update.html'
+
 
 def tags_list(request):
     tags = Tag.objects.all()
@@ -38,7 +43,12 @@ class TagUpdate(ObjectUpdateMixin, View):
     form_model = TagForm
     template = 'blog/tag_update.html'
 
-class PostUpdate(ObjectUpdateMixin, View):
+class TagDelete(ObjectDeleteMixin, View):
+    model = Tag
+    template = 'blog/tag_delete.html'
+    success_url = 'tags-list'
+
+class PostDelete(ObjectDeleteMixin, View):
     model = Post
-    form_model = PostForm
-    template = 'blog/post_update.html'
+    template = 'blog/post_delete.html'
+    success_url = 'posts-list'
