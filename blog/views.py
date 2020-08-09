@@ -1,5 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View
+
 
 from .forms import *
 from .models import *
@@ -15,14 +17,22 @@ class PostDetail(ObjectDetailMixin, View):
     model = Post
     template = 'blog/post_detail.html'
 
-class PostCreate(ObjectCreateMixin, View):
+class PostCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     form_model = PostForm
     template = 'blog/post_create.html'
+    raise_exception = True
 
-class PostUpdate(ObjectUpdateMixin, View):
+class PostUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Post
     form_model = PostForm
     template = 'blog/post_update.html'
+    raise_exception = True
+
+class PostDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
+    model = Post
+    template = 'blog/post_delete.html'
+    success_url = 'posts-list'
+    raise_exception = True
 
 
 def tags_list(request):
@@ -34,21 +44,19 @@ class TagDetail(ObjectDetailMixin, View):
     model = Tag
     template = 'blog/tag_detail.html'
 
-class TagCreate(ObjectCreateMixin, View):
+class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     form_model = TagForm
     template = 'blog/tag_create.html'
+    raise_exception = True
 
-class TagUpdate(ObjectUpdateMixin, View):
+class TagUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Tag
     form_model = TagForm
     template = 'blog/tag_update.html'
+    raise_exception = True
 
-class TagDelete(ObjectDeleteMixin, View):
+class TagDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     model = Tag
     template = 'blog/tag_delete.html'
     success_url = 'tags-list'
-
-class PostDelete(ObjectDeleteMixin, View):
-    model = Post
-    template = 'blog/post_delete.html'
-    success_url = 'posts-list'
+    raise_exception = True
